@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  firefox1:
+    container_name: firefox1
+    image: mybrowsers:0.1
+    build: mybrowsers/
+    volumes:
+      - /tmp/.X11-unix/X0:/tmp/.X11-unix/X0:rw
+      - /run/user/1000/pulse/native:/home/user/pulse-native:rw
+      - /home/user/docker/firefox/bin/firefox:/home/user/firefox:ro
+      - /home/user/docker/firefox/firefox1/mozilla:/home/user/.mozilla:rw
+      - /home/user/docker/firefox/firefox1/cache:/home/user/.cache:rw
+      - /home/user/docker/firefox/firefox1/local:/home/user/.local:rw
+    shm_size: '2gb'
+    user: user
+    read_only: true
+    environment:
+      TZ: ASD-10
+      PULSE_SERVER: unix:/home/user/pulse-native
+      DISPLAY: :0
+      PATH: "$PATH:~/bin"
+    command: /home/user/firefox/firefox
+    restart: "no"
+
+  chromium1:
+    container_name: chromium1
+    image: mybrowsers:0.1
+    build: mybrowsers/
+    volumes:
+      - /tmp/.X11-unix/X0:/tmp/.X11-unix/X0:rw
+      - /run/user/1000/pulse/native:/home/user/pulse-native:rw
+      - /home/user/docker/chromium/bin/chrome-linux:/home/user/chrome-linux:ro
+      - /home/user/docker/chromium/chromium1/cache:/home/user/.cache:rw
+      - /home/user/docker/chromium/chromium1/config:/home/user/.config:rw
+      - /home/user/docker/chromium/chromium1/pki:/home/user/.pki:rw
+      - /home/user/docker/chromium/chromium1/tmp:/tmp:rw
+    shm_size: '2gb'
+    user: user
+    read_only: true
+    stop_grace_period: 1s
+    environment:
+      TZ: ASD-10
+      PULSE_SERVER: unix:/home/user/pulse-native
+      DISPLAY: :0
+      PATH: "$PATH:~/bin"
+    command: "/home/user/chrome-linux/chrome --no-sandbox"
+    restart: "no"
